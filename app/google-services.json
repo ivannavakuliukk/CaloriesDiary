@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "172766843333",
+    "project_id": "caloriesdiary-b50c3",
+    "storage_bucket": "caloriesdiary-b50c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172766843333:android:43b0543c4dc695c3d8fbac",
+        "android_client_info": {
+          "package_name": "com.example.caloriesdiary"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK4lYRmXdMmco1WpnkMeSzCXTSHMi1vCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.CaloriesDiary" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/crimson</item>
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+        <!-- Darker variant of the primary color, used for status bar -->
+        <item name="colorPrimaryDark">@color/pink</item>
+
+        <!-- Accent color used for floating action buttons and other components -->
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="Theme.CaloriesDiary" parent="Base.Theme.CaloriesDiary" />
+</resources>
