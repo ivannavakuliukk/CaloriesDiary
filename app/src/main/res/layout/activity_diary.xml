@@ -217,10 +217,23 @@
             <!--addition block-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="130dp"
                 android:background="@color/pink"
                 android:layout_below="@id/snack"
-                />
+                >
+                <Button
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:onClick="startReportActivity"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_statistics"
+                    android:text="Перейти до статистики"
+                    android:fontFamily="@font/loraregular"
+                    android:textSize="16sp"
+                    />
+            </RelativeLayout>
 
         </RelativeLayout>
 

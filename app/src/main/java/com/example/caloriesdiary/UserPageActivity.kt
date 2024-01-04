@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import org.w3c.dom.Text
 
+// Активність сторінки користувача - виведення інформації про користувача, забезпечена можливість змінити дані
 class UserPageActivity : AppCompatActivity() {
     private lateinit var mDatabase: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,10 +87,13 @@ class UserPageActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    // Відкриття першої активності для редагування
     fun startEdit1Activity(v: View) {
         val intent = Intent(this, EditUser1Activity::class.java)
         startActivity(intent)
     }
+
+    // Відкриття другої активності для редагування
     fun startEdit2Activity(v: View) {
         val intent = Intent(this, EditUser2Activity::class.java)
         startActivity(intent)

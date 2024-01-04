@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
+            android:textSize="23sp"
             android:textColor="@color/white"
             android:text="Сторінка користувача"
             android:fontFamily="@font/loraregular"
@@ -117,8 +117,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Якщо ви зміните ці дані, ДН автоматично зміниться"
-                    android:textSize="18dp"
-                    android:fontFamily="@font/loraregular"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/lorabold"
                     android:textColor="@color/crimson"
                     android:layout_marginBottom="10dp"
                     />

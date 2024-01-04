@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.google.firebase.FirebaseApp
 
+// Головна активність, можна перейти до реєстрації або авторизації
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

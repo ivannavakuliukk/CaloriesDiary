@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
 
+// Активність реєстрації
 class SignInActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
@@ -18,15 +19,18 @@ class SignInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_in)
 
+        // Ініціалізація екземпляру FirebaseAuth
         auth = FirebaseAuth.getInstance()
         val emailEditText: EditText = findViewById(R.id.email_editText)
         val passwordEditText: EditText = findViewById(R.id.password_editText)
         val signInButton: Button = findViewById(R.id.button)
 
+        // Налаштування обробника подій на кнопку "Увійти"
         signInButton.setOnClickListener {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
+            // Перевірки вводу
             if (email.isEmpty()) {
                 emailEditText.error = "Введіть email"
                 return@setOnClickListener
@@ -36,16 +40,18 @@ class SignInActivity : AppCompatActivity() {
                 passwordEditText.error = "Введіть пароль"
                 return@setOnClickListener
             }
+            // Виклик функції для входу користувача
             signInUser(email, password)
         }
     }
 
+    // Функція для входу користувача за допомогою FirebaseAuth
     private fun signInUser(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Успішно авторизовано, перехід до іншої активності
-                    val intent = Intent(this, UserPageActivity::class.java)
+                    val intent = Intent(this, DiaryActivity::class.java)
                     Toast.makeText(this, "Авторизація успішна", Toast.LENGTH_SHORT).show()
                     startActivity(intent)
                 } else {

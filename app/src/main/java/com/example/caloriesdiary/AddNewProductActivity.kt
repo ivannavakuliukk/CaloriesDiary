@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+// активність для додавання нових продуктів в базу даних
 class AddNewProductActivity : AppCompatActivity() {
     private lateinit var databaseReference: DatabaseReference
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +26,7 @@ class AddNewProductActivity : AppCompatActivity() {
                 "Products"
             )
 
+        // поля вводу
         val productNameEditText: EditText = findViewById(R.id.name_editText)
         val brandEditText: EditText = findViewById(R.id.brand_editText)
         val caloriesEditText: EditText = findViewById(R.id.calories_editText)
@@ -36,6 +38,7 @@ class AddNewProductActivity : AppCompatActivity() {
 
 
         addButton.setOnClickListener {
+            // перевірки вводу
             // назва
             val productName = productNameEditText.text.toString().trim()
             if (productName.isEmpty() || productName.length < 5) {
@@ -93,6 +96,7 @@ class AddNewProductActivity : AppCompatActivity() {
 
     }
 
+    // метод для додавання продукту в бд
     private fun addProductToDatabase(
         productName: String,
         calories: Double,

@@ -8,9 +8,12 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.CalendarView
+import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +42,7 @@ class DiaryActivity : AppCompatActivity() {
     private var dayCarbohydrates = 0.0
 
     private var dn = 0.0
+    private var percentageFromDn = 0
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,9 +91,21 @@ class DiaryActivity : AppCompatActivity() {
             setTotalToZero()
             showProductLists(userId, selectedDate)
         }
-
     }
 
+    fun startReportActivity(v: View){
+        if(percentageFromDn!=0){
+            val intent = Intent(this, ReportActivity::class.java)
+            intent.putExtra("SELECTED_DATE", selectedDate)
+            intent.putExtra("PERCENTAGE_DN", percentageFromDn.toString())
+            intent.putExtra("TOTAL_FAT", dayFats.toString())
+            intent.putExtra("TOTAL_PROTEIN", dayProteins.toString())
+            intent.putExtra("TOTAL_CARBS", dayCarbohydrates.toString())
+            startActivity(intent)
+        }else{
+            Toast.makeText(this, "Додайте щось до щоденника щоб побачити статистику", Toast.LENGTH_SHORT).show()
+        }
+    }
     // Метод для встановлення сьогоднішньої дати
     @SuppressLint("SetTextI18n")
     private fun setTodayDate() {
@@ -117,10 +133,12 @@ class DiaryActivity : AppCompatActivity() {
         Log.d("CalendarVisibility", "Calendar visibility: ${calendarView.visibility}")
     }
 
+    //Метод для відкриття UserActivity
     fun startUserActivity(v: View) {
         val intent = Intent(this, UserPageActivity::class.java)
         startActivity(intent)
     }
+
 
     // метод для відкриття пошукової активності
     fun startSearchProductActivity(view: View) {
@@ -152,6 +170,7 @@ class DiaryActivity : AppCompatActivity() {
         productsRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val productList = mutableListOf<Product>()
+                // для початку встановлюєм значення total прийому їжі до нуля
                 var totalCalories = 0.0
                 var totalProteins = 0.0
                 var totalFats = 0.0
@@ -160,11 +179,13 @@ class DiaryActivity : AppCompatActivity() {
                 // Перевірка наявності даних для обраної дати
                 if (snapshot.exists()) {
                     snapshot.children.forEach { productSnapshot ->
+                        // Якщо дані наявні, отримуєм назву продукту та вагу
                         val productName = productSnapshot.key.toString()
                         val weight =
                             productSnapshot.child("weight").getValue(Double::class.java) ?: 0.0
 
                         val productInfoRef = database.child("Products").child(productName)
+                        // шукаємо відповідний продукт у таблиці з продуктами та отримуємо дані
                         productInfoRef.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(productInfoSnapshot: DataSnapshot) {
                                 val caloriesPer100 = productInfoSnapshot.child("calories")
@@ -177,6 +198,7 @@ class DiaryActivity : AppCompatActivity() {
                                 val carbsPer100 = productInfoSnapshot.child("carbs")
                                     .getValue(Double::class.java)!!.toDouble()
 
+                                // так, як кбжу в таблиці продуктів вказується на 100 г, треба обрахувати відносно ваги
                                 val calories = caloriesPer100 * 0.01 * weight
                                 val protein = proteinPer100 * 0.01 * weight
                                 val fat = fatPer100 * 0.01 * weight
@@ -184,17 +206,18 @@ class DiaryActivity : AppCompatActivity() {
                                 val product =
                                     Product(productName, weight, calories, protein, fat, carbs, countPercentageFromDn(calories))
 
+                                // оновлюєм значення total прийому їжі
                                 totalCalories += product.calories
                                 totalProteins += product.protein
                                 totalFats += product.fat
                                 totalCarbohydrates += product.carbs
 
+                                // оновлюєм значення total за цілий день
                                 dayCalories += product.calories
                                 dayProteins += product.protein
                                 dayFats += product.fat
                                 dayCarbohydrates += product.carbs
-
-
+                                // повертаєм список продуктів
                                 productList.add(product)
                                 if (productList.size == snapshot.childrenCount.toInt()) {
                                     callback(
@@ -232,6 +255,7 @@ class DiaryActivity : AppCompatActivity() {
     // Використання методу для отримання списку продуктів для сніданку
     private fun getProductListForBreakfast(userId: String, selectedDate: String) {
         val mealType = "breakfast"
+        // для відображення використовуємо власний адаптер для RecyclerView
         getProductListForMealType(userId, selectedDate, mealType) { productList, totalCalories, totalProteins, totalFats, totalCarbohydrates ->
             showTotal()
             val recyclerView: RecyclerView = findViewById(R.id.item_list_breakfast)
@@ -365,7 +389,7 @@ class DiaryActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun showTotal(){
-        // вставка значень тотал в макет, викликається після всього обрахунку
+        // вставка значень тотал в макет
         val dayTotalCaloriesTextView:TextView = findViewById(R.id.day_calories)
         dayTotalCaloriesTextView.text = dayCalories.toInt().toString()
         val dayTotalFatTextView:TextView = findViewById(R.id.day_fat)
@@ -375,15 +399,17 @@ class DiaryActivity : AppCompatActivity() {
         val dayTotalCarbsTextView:TextView = findViewById(R.id.day_carbs)
         dayTotalCarbsTextView.text = roundToSpecialFormat(dayCarbohydrates).toString()
         val dayTotalDnTextView: TextView = findViewById(R.id.day_dn)
-        dayTotalDnTextView.text = countPercentageFromDn(dayCalories).toString() + "%"
+        percentageFromDn = countPercentageFromDn(dayCalories)
+        dayTotalDnTextView.text = "$percentageFromDn%"
         // якщо відсоток дн перевищує сто текстове поле стає малиновим
-        if(countPercentageFromDn(dayCalories) > 100){
+        if(percentageFromDn> 100){
             dayTotalDnTextView.setTextColor(ContextCompat.getColor(this, R.color.crimson))
         }else{
             dayTotalDnTextView.setTextColor(ContextCompat.getColor(this, R.color.black))
         }
     }
 
+    // метод для отримання значення dn користувача
     private fun getDn(userId: String){
         // Отримання посилання на таблицю користувачів
         val usersRef = database.child("Users")
@@ -407,6 +433,7 @@ class DiaryActivity : AppCompatActivity() {
 
     }
 
+    // допоміжний метод для розрахунку відсотку калорійності від денної норми
     private fun countPercentageFromDn(calories: Double):Int{
         return ((calories * 100)/dn).toInt()
     }
@@ -424,6 +451,7 @@ class DiaryActivity : AppCompatActivity() {
         }
     }
 
+    // метод для встановлення всіх тотал до нуля, використовується при виборі користувачем іншої дати
     private fun setTotalToZero(){
         dayCalories = 0.0
         dayFats = 0.0

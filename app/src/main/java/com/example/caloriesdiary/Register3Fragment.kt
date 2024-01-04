@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-
+// Третій фрагмент активності реєстрації - тут користувач обирає спосіб життя
 class Register3Fragment : Fragment() {
 
     private lateinit var mDatabase: DatabaseReference
@@ -47,6 +47,7 @@ class Register3Fragment : Fragment() {
         // додаємо radiobutton з описами
         val radioGroup: RadioGroup = view.findViewById(R.id.radioGroup)
 
+        // кнопка завершення реєсрації
         val buttonOpenDiaryActivity: Button = view.findViewById(R.id.button_forward)
         buttonOpenDiaryActivity.setOnClickListener {
             val selectedId: Int = radioGroup.checkedRadioButtonId
@@ -58,6 +59,7 @@ class Register3Fragment : Fragment() {
                     "Помірно активний" -> 1.6
                     else -> 1.7
                 }
+                // створюєм користувача, додаєм дані з поточної та попередніх активностей
                 updateUserDataInFirebase(weight, height, goal_coef, age, gender, activityLevel)
             } else {
                 // Відобразити повідомлення про помилку, наприклад:
@@ -69,6 +71,7 @@ class Register3Fragment : Fragment() {
         return view
     }
 
+    //Метод збереження користувача до таблиці Users
     private fun updateUserData(userId: String, userData:User) {
         mDatabase.child("Users").child(userId).setValue(userData)
             .addOnCompleteListener { task ->
@@ -82,6 +85,7 @@ class Register3Fragment : Fragment() {
             }
     }
 
+    //Метод де ми використовуєм клас User для збереження даних
     private fun updateUserDataInFirebase(weight: Int, height:Int, goal_coef: Double, age: Int, gender:String, activityLevel:Double) {
         val user = FirebaseAuth.getInstance().currentUser
         user?.let {

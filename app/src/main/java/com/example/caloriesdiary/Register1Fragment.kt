@@ -13,6 +13,7 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
+// Перший фрагмент реєстрації - введення пошти та паролю
 class Register1Fragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth // Оголосити змінну mAuth на рівні класу
     override fun onCreateView(
@@ -28,6 +29,7 @@ class Register1Fragment : Fragment() {
         val passwordEditText: EditText = view.findViewById(R.id.password_editText) // Отримати посилання на поле вводу пароля
         val confirmPasswordEditText: EditText = view.findViewById(R.id.repeat_password_editText) // Отримати посилання на поле повторного введення пароля
 
+        // Обробник натискання на кнопку "Далі"
         btnOpenSecondFragment.setOnClickListener {
             // Отримання введених даних email та пароля
             val email = emailEditText.text.toString()
@@ -58,6 +60,7 @@ class Register1Fragment : Fragment() {
                     if (task.isSuccessful) {
                         // Якщо реєстрація успішна, створимо запис користувача в базі даних
                         val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                        // Переходим до другого фрагмента
                         transaction.replace(R.id.fragmentContainer,
                             Register2Fragment()
                         )
@@ -69,7 +72,7 @@ class Register1Fragment : Fragment() {
                 }
         }
 
-        // відкриття активності
+        // відкриття активності реєстрації
         val textOpenNewActivity: TextView = view.findViewById(R.id.text1)
         textOpenNewActivity.setOnClickListener {
             // Виклик нової активності

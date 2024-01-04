@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
+// Активність для редагування продукту в щоденнику
 class EditProductActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

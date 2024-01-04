@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReportActivity">
+<!--header-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/black"
+        android:layout_alignParentStart="true"
+        android:id="@+id/header">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:onClick="goBack"
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="13dp"
+                android:layout_weight="1"
+                android:background="@color/black"
+                android:scaleType="fitCenter"
+                android:src="@drawable/white_arrow" />
+
+            <TextView
+                android:id="@+id/todayDateTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_weight="15"
+                android:fontFamily="@font/loraregular"
+                android:text="Дата"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </LinearLayout>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/title"
+                android:text="Статистика вашого раціону"
+                android:textColor="@color/crimson"
+                android:fontFamily="@font/loraregular"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textSize="23dp"
+                />
+            <TextView
+                android:id="@+id/title1"
+                android:layout_marginTop="15dp"
+                android:layout_below="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Співвідношення бжу"
+                android:textSize="18sp"
+                android:fontFamily="@font/lorabold"
+                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                />
+
+            <!-- Діаграма "Співвідношення білків, жирів та вуглеводів" -->
+            <com.github.mikephil.charting.charts.PieChart
+                android:layout_below="@id/title1"
+                android:layout_marginTop="20dp"
+                android:id="@+id/pieChart"
+                android:layout_width="300dp"
+                android:fontFamily="@font/loraregular"
+                android:layout_height="300dp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/text1"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/pieChart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ідеальним співвідношенням збалансованого раціону є білки: 30%; жири: 30%; вуглеводи: 40%."
+                android:textSize="16sp"
+                android:fontFamily="@font/loraregular"
+                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                />
+            <TextView
+                android:id="@+id/title2"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/text1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Набрана вами калорійність відносно денної норми"
+                android:textSize="18sp"
+                android:fontFamily="@font/lorabold"
+                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                />
+            <!-- Діаграма "Відсоток від норми" -->
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_marginTop="20dp"
+                android:id="@+id/barChart"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:fontFamily="@font/loraregular"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@id/title2" />
+            <TextView
+                android:id="@+id/text2"
+                android:layout_below="@+id/barChart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Старайтесь дотримуватись денної норми калорій для досягнення результату."
+                android:textSize="16sp"
+                android:fontFamily="@font/loraregular"
+                android:textColor="@color/black"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
+                />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

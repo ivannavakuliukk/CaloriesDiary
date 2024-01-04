@@ -1,5 +1,6 @@
 package com.example.caloriesdiary.models
 
+// Клас- модель User, використовується для додавання користувача в бд, редагування даних
 data class User(
     val weight: Int,
     val height: Int,
@@ -24,6 +25,7 @@ data class User(
         dn = calculateDN()
     }
 
+    // Обрахування денної норми користувача за формулою відносно інших даних
     fun calculateDN(): Double {
             return if (gender == ('ж').toString()){
                 (655 + (9.5 * weight) + (1.8*height) - (4.7*age)*activityLevel)*goal_coef

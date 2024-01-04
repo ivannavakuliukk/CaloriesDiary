@@ -12,17 +12,13 @@ import android.widget.Spinner
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
+// Другий фрагмент активності реєстрації - користувач може ввести: вагу, ріст, вік, мету, стать
 class Register2Fragment : Fragment() {
-
-    private lateinit var mDatabase: DatabaseReference
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_register2, container, false)
-        mDatabase = FirebaseDatabase.getInstance("https://caloriesdiary-b50c3-default-rtdb.europe-west1.firebasedatabase.app/").reference
         // кнопка відкриття попереднього - першого фрагмента
         val btnOpenFirstFragment: Button = view.findViewById(R.id.button_back)
         btnOpenFirstFragment.setOnClickListener {
@@ -32,7 +28,6 @@ class Register2Fragment : Fragment() {
             transaction.addToBackStack(null)
             transaction.commit()
         }
-
         //додаємо дані в перший спінер
         val spinner: Spinner = view.findViewById(R.id.spinner)
         val items = arrayOf("схуднення", "підтримання ваги", "набір ваги")
@@ -48,7 +43,7 @@ class Register2Fragment : Fragment() {
         // кнопка відкриття наступного - третього фрагмента, передавання даних в наступний фрагмент
         val btnOpenThirdFragment: Button = view.findViewById(R.id.button_forward)
         btnOpenThirdFragment.setOnClickListener {
-            // змінна для підтвердження правильності перевірок
+            // перевірки вводу
             // вага
             val weightEditText: EditText = view.findViewById(R.id.weight_editText)
             val weightText = weightEditText.text.toString()

@@ -15,7 +15,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.auth.FirebaseAuth
 
+// активність для додавання продукту в щоденник
 class AddProductActivity : AppCompatActivity() {
+    // Змінні для зберігання вибраної дати, типу прийому та назви обраного продукту
     private lateinit var selectedDate:String
     private lateinit var selectedMealType:String
     private lateinit var selectedProductName:String
@@ -50,7 +52,7 @@ class AddProductActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.hasChild(selectedProductName)) {
                     val productSnapshot = dataSnapshot.child(selectedProductName)
-
+                    // отримання даних
                     val calories = productSnapshot.child("calories").value.toString()
                     val fat = productSnapshot.child("fat").value.toString()
                     val protein = productSnapshot.child("protein").value.toString()
@@ -80,13 +82,17 @@ class AddProductActivity : AppCompatActivity() {
         })
 
     }
+    // Обробник натискання кнопки "Зберегти"
     fun onSaveClicked(view: View) {
+        // Отримання введеної ваги продукту
         val weightEditText: EditText = findViewById(R.id.weight_editText)
         val weightInput = weightEditText.text.toString()
 
+        // перевірка вводу
         if (weightInput.isNotEmpty()) {
             val weight = weightInput.toDoubleOrNull()
             if (weight != null && weight >= 0) {
+                // Збереження даних про продукт у базі даних
                 saveProductData(selectedDate, selectedMealType, selectedProductName, weight)
             } else {
                 weightEditText.error = "Введіть коректну вагу"
@@ -96,7 +102,9 @@ class AddProductActivity : AppCompatActivity() {
         }
     }
 
+    // функція для збереження даних у щоденник
     private fun saveProductData(date: String, mealType: String, productName: String, weight: Double) {
+       // отримання необхідних посилань на бд
         databaseReference = FirebaseDatabase.getInstance("https://caloriesdiary-b50c3-default-rtdb.europe-west1.firebasedatabase.app/").reference.child("Diaries")
         val currentUser = FirebaseAuth.getInstance().currentUser
         val userId = currentUser!!.uid
@@ -114,6 +122,7 @@ class AddProductActivity : AppCompatActivity() {
                     val productRef = newDiaryRef.child(productName)
                     productRef.child("weight").setValue(weight)
                 }
+                // викликаємо активність щоденника і передаєм дату, щоб відображався щоденник відповідної дати
                 val intent = Intent(this@AddProductActivity, DiaryActivity::class.java)
                 intent.putExtra("SELECTED_DATE", selectedDate)
                 startActivity(intent)

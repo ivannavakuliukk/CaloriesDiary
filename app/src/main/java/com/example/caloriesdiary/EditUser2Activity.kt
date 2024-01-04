@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-
+// Активність, яка дозволяє користувачу редагувати особисті дані, відносно цих змін змінюється значення DN
 class EditUser2Activity : AppCompatActivity() {
     private lateinit var mDatabase: DatabaseReference
     private lateinit var currentUser: FirebaseUser
@@ -26,6 +26,7 @@ class EditUser2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_user2)
 
+        // Ініціалізація посилання на базу даних та поточного користувача Firebase
         mDatabase = FirebaseDatabase.getInstance("https://caloriesdiary-b50c3-default-rtdb.europe-west1.firebasedatabase.app/").reference
         currentUser = FirebaseAuth.getInstance().currentUser!!
 
@@ -93,9 +94,8 @@ class EditUser2Activity : AppCompatActivity() {
                 Log.e("TAG", "onCancelled: ${databaseError.toException()}")
             }
         })
-
+        // Обробник натискання кнопки "Зберегти"
         saveButton.setOnClickListener {
-
             //задаємо всі перевірки вводу користувача
             //перевірка вводу ваги
             val weightText = weightEditText.text.toString()
@@ -187,23 +187,24 @@ class EditUser2Activity : AppCompatActivity() {
                 "помірно активний" -> {1.6}
                 else -> { 1.7 }
             }
-
+            // оновлення введених даних у бд Firebase
             updateUserDataInFirebase(weight, height, goal_coef, age, gender, activityLevel)
         }
 
     }
+    // Функція для оновлення користувацького профілю у базі даних Firebase
     private fun updateUserDataInFirebase(weight: Int, height: Int, goal_coef: Double, age: Int, gender: String, activityLevel: Double) {
         val user = currentUser
         user.let {
             val userId = it.uid
+            // Використовуєм клас User для зберігання даних
             val userData = User(weight, height, goal_coef, age, gender, activityLevel)
 
             mDatabase.child("Users").child(userId).setValue(userData)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        val intent = Intent(this, UserPageActivity::class.java)
+                        // закриття активності при успішності операції
                         Toast.makeText(applicationContext, "Дані успішно змінено", Toast.LENGTH_SHORT).show()
-                        startActivity(intent)
                         finish()
                     } else {
                         Toast.makeText(applicationContext, "Сталася помилка", Toast.LENGTH_SHORT).show()

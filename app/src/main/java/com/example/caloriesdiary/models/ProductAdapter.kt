@@ -11,7 +11,9 @@ import java.util.Formatter
 
 class ProductAdapter(private val productList: List<Product>, private val onItemClick: (Product) -> Unit) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
+    // Внутрішній клас, який управляє відображенням кожного елемента списку
     inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        // Оголошення елементів інтерфейсу для кожного продукту у списку
         val productNameTextView: TextView = itemView.findViewById(R.id.product_name)
         val weightTextView: TextView = itemView.findViewById(R.id.weight)
         val caloriesTextView:TextView = itemView.findViewById(R.id.calories)
@@ -21,6 +23,7 @@ class ProductAdapter(private val productList: List<Product>, private val onItemC
         val dnTextView:TextView = itemView.findViewById(R.id.dn)
 
         init {
+            // Обробник подій на клік по елементу списку
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
@@ -30,14 +33,17 @@ class ProductAdapter(private val productList: List<Product>, private val onItemC
         }
     }
 
+    // Створення відображення для кожного елемента списку
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
         return ProductViewHolder(view)
     }
 
+    // Налаштування відображення даних для кожного елемента списку
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
+        // Заповнення полів елемента списку інформацією про продукт
         holder.productNameTextView.text = product.name
         holder.weightTextView.text = product.weight.toInt().toString()
         holder.caloriesTextView.text = product.calories.toInt().toString()
@@ -47,6 +53,7 @@ class ProductAdapter(private val productList: List<Product>, private val onItemC
         holder.dnTextView.text = product.percentageFromDn.toString() + "%"
     }
 
+    // Повертає кількість елементів у списку
     override fun getItemCount(): Int {
         return productList.size
     }

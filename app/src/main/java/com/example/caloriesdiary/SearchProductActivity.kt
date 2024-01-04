@@ -35,16 +35,19 @@ class SearchProductActivity : AppCompatActivity() {
         dateTextView.text = selectedDate
         mealTextView.text = mealType
 
+        // Ініціалізація елементів у інтерфейсі
         autoCompleteTextView = findViewById(R.id.search)
         productListView = findViewById(R.id.productListView)
         noResultsTextView = findViewById(R.id.noResultsTextView)
 
+        // Посилання на базу даних - таблицю продуктів
         databaseReference = FirebaseDatabase.getInstance("https://caloriesdiary-b50c3-default-rtdb.europe-west1.firebasedatabase.app/").reference.child("Products")
 
         val productsList = mutableListOf<String>()
         adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, productsList)
         productListView.adapter = adapter
 
+        // Слухач для автозаповнення текстового поля пошуку
         autoCompleteTextView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -57,7 +60,7 @@ class SearchProductActivity : AppCompatActivity() {
                 loadProductsFromFirebase(userInput)
             }
         })
-        // передаємо дані при переході на сторінку додавання продукту
+        // передаємо дані при переході на сторінку додавання продукту - натисканні на продукт
         productListView.setOnItemClickListener { _, _, position, _ ->
             val selectedProduct = adapter.getItem(position)
             val intent = Intent(this, AddProductActivity::class.java)
@@ -69,11 +72,13 @@ class SearchProductActivity : AppCompatActivity() {
         }
     }
 
+    // Функція для завантаження списку продуктів з Firebase
     private fun loadProductsFromFirebase(userInput: String) {
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val productsList = mutableListOf<String>()
-
+                // Пошук продуктів у базі даних, які відповідають введеному запиту користувача
+                // та додавання їх до списку
                 for (productSnapshot in dataSnapshot.children) {
                     val productName = productSnapshot.key.toString()
                     productName.let {
@@ -82,7 +87,7 @@ class SearchProductActivity : AppCompatActivity() {
                         }
                     }
                 }
-
+                // Оновлення списку продуктів на екрані
                 updateList(productsList)
             }
 
@@ -92,9 +97,10 @@ class SearchProductActivity : AppCompatActivity() {
         })
     }
 
+    // Функція для оновлення списку продуктів на екрані
     private fun updateList(productsList: MutableList<String>) {
         adapter.clear()
-
+        // Відображення списку продуктів у списку на екрані
         if (productsList.isEmpty()) {
             noResultsTextView.visibility = View.VISIBLE
         } else {
@@ -105,10 +111,12 @@ class SearchProductActivity : AppCompatActivity() {
         adapter.notifyDataSetChanged()
     }
 
+    // Функція для повернення до попередньої активності (Щоденник)
     fun backToDiaryActivity(v: View) {
         finish() // Закриття поточної активності
     }
 
+    // Функція для відкриття сторінки додавання нового продукту
     fun openAddNewProduct(v:View){
         val intent = Intent(this, AddNewProductActivity::class.java)
         startActivity(intent)
